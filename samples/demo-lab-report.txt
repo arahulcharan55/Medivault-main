@@ -1,0 +1,16 @@
+Sample Lab Report
+
+Date: 15/03/2025
+Hospital: City General Hospital
+Physician: Dr. Anita Sharma
+
+Diagnosis: Type 2 Diabetes Mellitus
+
+Medication: Metformin 500mg twice daily
+
+BP: 130/85 mmHg
+HbA1c: 7.4%
+
+Procedure: Fasting Blood Glucose Test
+
+Allergy: Penicillin

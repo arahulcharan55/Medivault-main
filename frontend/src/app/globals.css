@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4f7f8;
+  --foreground: #0f1c1e;
+}
+
+body {
+  color: var(--foreground);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, #d7eee8 0%, transparent 55%),
+    radial-gradient(900px 320px at 100% 0%, #e8f3ef 0%, transparent 50%),
+    var(--background);
+  font-family: "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+}
+
+.card {
+  @apply rounded-2xl border border-slate-200/80 bg-white/90 shadow-sm backdrop-blur;
+}
+
+.btn-primary {
+  @apply rounded-lg bg-teal-700 px-4 py-2 text-sm font-medium text-white transition hover:bg-teal-800 disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50;
+}

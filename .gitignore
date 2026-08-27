@@ -1,0 +1,21 @@
+# Local/dev artifacts
+backend/.venv/
+backend/medivault.db
+backend/storage/
+backend/.env
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Logs
+*.log
