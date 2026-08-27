@@ -14,6 +14,49 @@ ALLOWED_MIME_TYPES = {
     "image/png": ".png",
 }
 
+# Browsers and some operating systems send a generic content type (or none) for
+# perfectly valid PDFs/images, especially on drag-and-drop uploads. Fall back to
+# the filename extension and content sniffing before rejecting the upload.
+_EXTENSION_MIME_TYPES = {
+    ".pdf": "application/pdf",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+}
+_GENERIC_MIME_TYPES = {"", "application/octet-stream", "binary/octet-stream"}
+
+
+def _sniff_mime_type(content: bytes) -> str | None:
+    if content.startswith(b"%PDF-"):
+        return "application/pdf"
+    if content.startswith(b"\xff\xd8\xff"):
+        return "image/jpeg"
+    if content.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "image/png"
+    return None
+
+
+def resolve_mime_type(declared: str | None, filename: str | None, content: bytes = b"") -> str:
+    """Best-effort content type for an upload.
+
+    Trusts the client's content type when it is one we accept, otherwise derives
+    it from the filename extension or the file's magic bytes.
+    """
+    declared = (declared or "").split(";")[0].strip().lower()
+    if declared in ALLOWED_MIME_TYPES:
+        return declared
+
+    ext = Path(filename or "").suffix.lower()
+    if declared in _GENERIC_MIME_TYPES and ext in _EXTENSION_MIME_TYPES:
+        return _EXTENSION_MIME_TYPES[ext]
+
+    sniffed = _sniff_mime_type(content)
+    if sniffed:
+        return sniffed
+    if ext in _EXTENSION_MIME_TYPES:
+        return _EXTENSION_MIME_TYPES[ext]
+    return declared or "application/octet-stream"
+
 
 def ensure_storage_root() -> Path:
     root = Path(settings.storage_path)

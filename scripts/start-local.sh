@@ -17,7 +17,7 @@ fi
 [ -f .env ] || cp .env.example .env
 
 # Seed demo users if DB empty
-python scripts/seed_demo.py || true
+PYTHONPATH=. python scripts/seed_demo.py || true
 
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!

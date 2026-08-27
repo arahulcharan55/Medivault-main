@@ -11,7 +11,7 @@ from app.models import AuditOutcome, ExtractionJob, MedicalDocument, ProcessingS
 from app.schemas import DocumentResponse, ExtractionJobResponse, ExtractionReviewRequest
 from app.services.authorization import AuthorizationError, authorize_document, write_audit
 from app.services.processing import persist_extracted_records, process_document
-from app.services.storage import build_object_key, compute_hash, save_document, validate_upload
+from app.services.storage import build_object_key, compute_hash, resolve_mime_type, save_document, validate_upload
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -39,7 +39,7 @@ async def upload_document(
         raise HTTPException(status_code=403, detail={"code": "ACCESS_DENIED", "message": "Patients only"})
 
     content = await file.read()
-    mime_type = file.content_type or "application/octet-stream"
+    mime_type = resolve_mime_type(file.content_type, file.filename, content)
     try:
         validate_upload(mime_type, len(content))
     except ValueError as exc:
